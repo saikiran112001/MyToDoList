@@ -11,6 +11,36 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
   </Design.DataContext>
+  <Grid RowDefinitions="Auto,*,Auto" x:Name="Root">
+    <TextBlock Classes= "h1" Text="SimpleToDoList"/>
+    <ScrollViewer Grid.Row="1">
+      <ItemsControl ItemsSource="{Binding ToDoItems}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="vm:ToDoItemViewModel">
+            <Grid ColumnDefinitions="*,Auto">
+              <CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked}"/>
+              <Button Command="{Binding #Root.((vm:MainViewModel)DataContext).RemoveItemCommand}"
+                      CommandParameter="{Binding .}"
+                      Grid.Column="1">
+                <PathIcon Data="{DynamicResource delete_off_regular}" Foreground="GreenYellow" />
+              </Button>
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+    <TextBox Grid.Row="2" Text="{Binding NewItemContent}" Watermark="Add a new item">
+      <TextBox.InnerRightContent>
+        <Button Command="{Binding AddItemCommand}">
+          <PathIcon Data="{DynamicResource add_circle_regular}" Foreground="Red" />
+        </Button>
+      </TextBox.InnerRightContent>
+      <TextBox.KeyBindings>
+        <KeyBinding Command="{Binding AddItemCommand}" Gesture="Return" />
+      </TextBox.KeyBindings>
+    </TextBox>
+  </Grid>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
 </UserControl>
